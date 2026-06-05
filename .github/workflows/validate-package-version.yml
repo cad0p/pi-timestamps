@@ -1,0 +1,30 @@
+name: Validate Package Version
+
+on:
+  workflow_call:
+  pull_request:
+    branches: [main, 'release/*']
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Check version matches main
+        run: |
+          MAIN_VERSION=$(git show origin/main:package.json 2>/dev/null | jq -r '.version' || echo "0.0.0")
+          PR_VERSION=$(jq -r '.version' package.json)
+          MAIN_BASE=$(echo "$MAIN_VERSION" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
+          PR_BASE=$(echo "$PR_VERSION" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
+          if [ "$PR_BASE" != "$MAIN_BASE" ]; then
+            echo "::error::PR base version ($PR_BASE) doesn't match main ($MAIN_BASE)"
+            exit 1
+          fi

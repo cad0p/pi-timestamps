@@ -1,0 +1,57 @@
+name: Validate Release PR
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches: [main]
+
+permissions:
+  contents: read
+  pull-requests: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: latest
+
+      - name: Check PR targets main
+        run: |
+          if [ "${{ github.base_ref }}" != "main" ]; then
+            echo "::error::Release PRs must target main"
+            exit 1
+          fi
+
+      - name: Check PR title format
+        run: |
+          TITLE="${{ github.event.pull_request.title }}"
+          if ! echo "$TITLE" | grep -qE '^chore\(release\): v[0-9]+\.[0-9]+\.[0-9]+(-[0-9]{8}(\.[0-9]+)?)?$'; then
+            echo "::error::PR title must match 'chore(release): vX.Y.Z' or 'chore(release): vX.Y.Z-YYYYMMDD.N'"
+            echo "Got: $TITLE"
+            exit 1
+          fi
+
+      - name: Check branch name format
+        run: |
+          BRANCH="${{ github.head_ref }}"
+          if ! echo "$BRANCH" | grep -qE '^release/v[0-9]+\.[0-9]+\.[0-9]+$'; then
+            echo "::error::Release branch must be named 'release/vX.Y.Z'"
+            echo "Got: $BRANCH"
+            exit 1
+          fi
+
+      - name: Check version in package.json
+        run: |
+          VERSION=$(jq -r '.version' package.json)
+          BASE_VERSION=$(echo "$VERSION" | grep -oE '^[0-9]+\.[0-9]+\.[0-9]+')
+          if [ "$VERSION" != "$BASE_VERSION" ] && ! echo "$VERSION" | grep -qE '^[0-9]+\.[0-9]+\.[0-9]+-[0-9]{8}(\.[0-9]+)?$'; then
+            echo "::error::package.json version must be either 'X.Y.Z' (base) or 'X.Y.Z-YYYYMMDD.N' (calver)"
+            echo "Got: $VERSION"
+            exit 1
+          fi
