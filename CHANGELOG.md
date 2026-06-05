@@ -13,4 +13,6 @@ All notable changes to this project will be documented in this file.
 
 - Update biome config for v2.4.16 ([#1](https://github.com/cad0p/pi-timestamps/pull/1))
 
+- Exclude test files from npm package, update biome version ([#2](https://github.com/cad0p/pi-timestamps/pull/2))
+
 
