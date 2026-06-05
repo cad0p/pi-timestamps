@@ -6,66 +6,86 @@
  * Strips at `context` so the LLM never sees them.
  */
 
-import type { ExtensionAPI, Message, UserMessage, AssistantMessage } from "@earendil-works/pi-coding-agent";
+import type {
+  AssistantMessage,
+  Message as PiAiMessage,
+  TextContent,
+  UserMessage,
+} from '@earendil-works/pi-ai';
+import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 
-const DIM = "\x1b[2m";
-const RESET = "\x1b[0m";
+const DIM = '\x1b[2m';
+const RESET = '\x1b[0m';
 // Build regex from constants to avoid control chars in regex literal
-const TIMESTAMP_SUFFIX_REGEX = new RegExp(` ${DIM.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z${RESET.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
+const TIMESTAMP_SUFFIX_REGEX = new RegExp(
+  ` ${DIM.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z${RESET.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}$`,
+);
 
-function fmtUtc(ts: number): string {
-	return new Date(ts).toISOString().replace(/\.\d{3}Z$/, "Z");
+export function fmtUtc(ts: number): string {
+  return new Date(ts).toISOString().replace(/\.\d{3}Z$/, 'Z');
 }
 
-function appendTimestamp(content: Message["content"], suffix: string): Message["content"] {
-	const styled = `${DIM}${suffix}${RESET}`;
-	if (typeof content === "string") {
-		return `${content}  ${styled}`;
-	}
-	return [...content, { type: "text", text: `  ${styled}` }];
+// biome-ignore lint/suspicious/noExplicitAny: content type varies by role
+export function appendTimestamp(content: PiAiMessage['content'], suffix: string): any {
+  const styled = `${DIM}${suffix}${RESET}`;
+  if (typeof content === 'string') {
+    return `${content}  ${styled}`;
+  }
+  return [...content, { type: 'text', text: `  ${styled}` }];
 }
 
-function stripTimestamp(content: Message["content"]): Message["content"] {
-	if (typeof content === "string") {
-		return content.replace(TIMESTAMP_SUFFIX_REGEX, "");
-	}
-	if (content.length > 0 && content[content.length - 1].type === "text") {
-		const text = content[content.length - 1].text;
-		if (TIMESTAMP_SUFFIX_REGEX.test(text)) {
-			return content.slice(0, -1);
-		}
-	}
-	return content;
+// biome-ignore lint/suspicious/noExplicitAny: content type varies by role
+export function stripTimestamp(content: PiAiMessage['content']): any {
+  if (typeof content === 'string') {
+    return content.replace(TIMESTAMP_SUFFIX_REGEX, '');
+  }
+  const arr = content as TextContent[];
+  if (arr.length > 0 && arr[arr.length - 1].type === 'text') {
+    const text = arr[arr.length - 1].text;
+    if (TIMESTAMP_SUFFIX_REGEX.test(text)) {
+      return arr.slice(0, -1) as PiAiMessage['content'];
+    }
+  }
+  return content;
 }
 
 function getTimestamp(msg: UserMessage | AssistantMessage): number {
-	return msg.timestamp ?? Date.now();
+  return msg.timestamp ?? Date.now();
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: pi event types are opaque
+type MessageEndEvent = { message: any };
+
+export { DIM, RESET, TIMESTAMP_SUFFIX_REGEX };
+
 export default function (pi: ExtensionAPI) {
-	pi.on("message_end", async (event, _ctx) => {
-		const msg = event.message;
+  // biome-ignore lint/suspicious/noExplicitAny: pi event types are opaque
+  pi.on('message_end' as any, async (event: MessageEndEvent, _ctx: any) => {
+    const msg = event.message;
 
-		if (msg.role !== "user" && msg.role !== "assistant") {
-			return;
-		}
+    if (msg.role !== 'user' && msg.role !== 'assistant') {
+      return;
+    }
 
-		const ts = getTimestamp(msg as UserMessage | AssistantMessage);
-		const suffix = fmtUtc(ts);
+    const ts = getTimestamp(msg as UserMessage | AssistantMessage);
+    const suffix = fmtUtc(ts);
 
-		return {
-			message: {
-				...msg,
-				content: appendTimestamp(msg.content, suffix),
-			},
-		};
-	});
+    return {
+      message: {
+        ...msg,
+        // biome-ignore lint/suspicious/noExplicitAny: msg content is opaque
+        content: appendTimestamp((msg as any).content, suffix),
+      },
+    };
+  });
 
-	pi.on("context", async (event, _ctx) => {
-		const cleanMessages = event.messages.map((m) => ({
-			...m,
-			content: stripTimestamp(m.content),
-		}));
-		return { messages: cleanMessages };
-	});
+  // biome-ignore lint/suspicious/noExplicitAny: pi event types are opaque
+  pi.on('context' as any, async (event: { messages: any[] }, _ctx: any) => {
+    const cleanMessages = event.messages.map((m) => ({
+      ...m,
+      // biome-ignore lint/suspicious/noExplicitAny: message content is opaque
+      content: stripTimestamp((m as any).content),
+    }));
+    return { messages: cleanMessages };
+  });
 }
