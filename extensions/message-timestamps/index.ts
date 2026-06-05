@@ -81,11 +81,17 @@ export default function (pi: ExtensionAPI) {
 
   // biome-ignore lint/suspicious/noExplicitAny: pi event types are opaque
   pi.on('context' as any, async (event: { messages: any[] }, _ctx: any) => {
-    const cleanMessages = event.messages.map((m) => ({
-      ...m,
-      // biome-ignore lint/suspicious/noExplicitAny: message content is opaque
-      content: stripTimestamp((m as any).content),
-    }));
+    const cleanMessages = event.messages.map((m) => {
+      // Only strip timestamps from user/assistant messages that have content
+      if ((m.role === 'user' || m.role === 'assistant') && m.content != null) {
+        return {
+          ...m,
+          // biome-ignore lint/suspicious/noExplicitAny: message content is opaque
+          content: stripTimestamp((m as any).content),
+        };
+      }
+      return m;
+    });
     return { messages: cleanMessages };
   });
 }
