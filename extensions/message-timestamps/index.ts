@@ -6,12 +6,12 @@
  * Strips at `context` so the LLM never sees them.
  */
 
-import type { ExtensionAPI, Message } from "@earendil-works/pi-coding-agent";
+import type { ExtensionAPI, Message, UserMessage, AssistantMessage } from "@earendil-works/pi-coding-agent";
 
 const DIM = "\x1b[2m";
 const RESET = "\x1b[0m";
-// Match: "  \x1b[2m2026-06-05T21:29:27Z\x1b[0m" at end of string
-const TIMESTAMP_SUFFIX_REGEX = / \x1b\[2m\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z\x1b\[0m$/;
+// Build regex from constants to avoid control chars in regex literal
+const TIMESTAMP_SUFFIX_REGEX = new RegExp(` ${DIM.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}Z${RESET.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}$`);
 
 function fmtUtc(ts: number): string {
 	return new Date(ts).toISOString().replace(/\.\d{3}Z$/, "Z");
@@ -38,6 +38,10 @@ function stripTimestamp(content: Message["content"]): Message["content"] {
 	return content;
 }
 
+function getTimestamp(msg: UserMessage | AssistantMessage): number {
+	return msg.timestamp ?? Date.now();
+}
+
 export default function (pi: ExtensionAPI) {
 	pi.on("message_end", async (event, _ctx) => {
 		const msg = event.message;
@@ -46,7 +50,7 @@ export default function (pi: ExtensionAPI) {
 			return;
 		}
 
-		const ts = (msg as any).timestamp ?? Date.now();
+		const ts = getTimestamp(msg as UserMessage | AssistantMessage);
 		const suffix = fmtUtc(ts);
 
 		return {
