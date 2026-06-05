@@ -13,4 +13,6 @@ All notable changes to this project will be documented in this file.
 
 - Context event crash on tool messages — only strip timestamps from user/assistant messages ([#4](https://github.com/cad0p/pi-timestamps/pull/4))
 
+- Biome formatting ([#5](https://github.com/cad0p/pi-timestamps/pull/5))
+
 
