@@ -20,4 +20,6 @@ All notable changes to this project will be documented in this file.
 
 - Biome formatting ([#5](https://github.com/cad0p/pi-timestamps/pull/5))
 
+- Remove unused UserMessage import, add trailing newline ([#8](https://github.com/cad0p/pi-timestamps/pull/8))
+
 
