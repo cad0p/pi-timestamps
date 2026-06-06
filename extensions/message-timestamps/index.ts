@@ -6,12 +6,7 @@
  * Strips at `context` so the LLM never sees them.
  */
 
-import type {
-  AssistantMessage,
-  Message as PiAiMessage,
-  TextContent,
-  UserMessage,
-} from '@earendil-works/pi-ai';
+import type { AssistantMessage, Message as PiAiMessage, TextContent } from '@earendil-works/pi-ai';
 import type { ExtensionAPI } from '@earendil-works/pi-coding-agent';
 
 const DIM = '\x1b[2m';
