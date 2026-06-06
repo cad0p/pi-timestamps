@@ -1,7 +1,7 @@
 /**
  * message-timestamps
  *
- * Appends a dim-styled UTC ISO timestamp to every user/assistant message.
+ * Appends a dim-styled UTC ISO timestamp to every assistant message.
  * Uses ANSI dim escape codes for visual parity with thinking blocks.
  * Strips at `context` so the LLM never sees them.
  */
@@ -49,7 +49,7 @@ export function stripTimestamp(content: PiAiMessage['content']): any {
   return content;
 }
 
-function getTimestamp(msg: UserMessage | AssistantMessage): number {
+function getTimestamp(msg: AssistantMessage): number {
   return msg.timestamp ?? Date.now();
 }
 
@@ -63,11 +63,12 @@ export default function (pi: ExtensionAPI) {
   pi.on('message_end' as any, async (event: MessageEndEvent, _ctx: any) => {
     const msg = event.message;
 
-    if (msg.role !== 'user' && msg.role !== 'assistant') {
+    // Only add timestamps to assistant messages
+    if (msg.role !== 'assistant') {
       return;
     }
 
-    const ts = getTimestamp(msg as UserMessage | AssistantMessage);
+    const ts = getTimestamp(msg as AssistantMessage);
     const suffix = fmtUtc(ts);
 
     return {
@@ -82,8 +83,8 @@ export default function (pi: ExtensionAPI) {
   // biome-ignore lint/suspicious/noExplicitAny: pi event types are opaque
   pi.on('context' as any, async (event: { messages: any[] }, _ctx: any) => {
     const cleanMessages = event.messages.map((m) => {
-      // Only strip timestamps from user/assistant messages that have content
-      if ((m.role === 'user' || m.role === 'assistant') && m.content != null) {
+      // Only strip timestamps from assistant messages that have content
+      if (m.role === 'assistant' && m.content != null) {
         return {
           ...m,
           // biome-ignore lint/suspicious/noExplicitAny: message content is opaque
