@@ -1,7 +1,7 @@
 {
   "name": "@cad0p/pi-timestamps",
   "version": "0.1.4",
-  "description": "Inline UTC timestamps for every message in pi coding agent — dim-styled, LLM-safe, zero-config",
+  "description": "Compact local timestamps and elapsed prompt time for assistant messages in pi",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -16,11 +16,11 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cad0p/pi-timestamps.git"
+    "url": "git+https://github.com/krajcik/pi-timestamps.git"
   },
-  "homepage": "https://github.com/cad0p/pi-timestamps#readme",
+  "homepage": "https://github.com/krajcik/pi-timestamps#readme",
   "bugs": {
-    "url": "https://github.com/cad0p/pi-timestamps/issues"
+    "url": "https://github.com/krajcik/pi-timestamps/issues"
   },
   "files": [
     "extensions/message-timestamps/index.ts",

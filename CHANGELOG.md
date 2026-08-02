@@ -2,6 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
+## Unreleased
+
+- Format timestamps in the machine's local timezone as `HH:mm DD.MM.YYYY`.
+- Show elapsed whole minutes since the latest user message.
+- Restore elapsed-time tracking after session reload.
+- Strip both the new display format and legacy timestamp formats from model context.
+
 ## [0.1.1] - 2026-06-06
 
 <!-- USER-EDITABLE SECTION START -->
