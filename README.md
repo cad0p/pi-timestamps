@@ -7,8 +7,6 @@ assistant response  21:44 05.06.2026 (3м)
 assistant response  23:50 05.06.2026 (2ч 06м)
 ```
 
-Forked from [`cad0p/pi-timestamps`](https://github.com/cad0p/pi-timestamps).
-
 ## Features
 
 - **Local time** — uses the machine's timezone
@@ -22,13 +20,13 @@ Forked from [`cad0p/pi-timestamps`](https://github.com/cad0p/pi-timestamps).
 ## Install
 
 ```bash
-pi install git:github.com/krajcik/pi-timestamps
+pi install npm:@cad0p/pi-timestamps
 ```
 
 Or try without installing:
 
 ```bash
-pi -e git:github.com/krajcik/pi-timestamps
+pi -e npm:@cad0p/pi-timestamps
 ```
 
 Run `/reload` after replacing another timestamp extension in an active session.
