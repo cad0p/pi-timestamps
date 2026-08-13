@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### 🚀 Features
 
 - Add AGENTS.md with mandatory pre-answer checklist ([#13](https://github.com/cad0p/pi-timestamps/pull/13))
+- V0.2 custom-entry timestamps (data-less markers) ([#20](https://github.com/cad0p/pi-timestamps/pull/20))
 
 ### ⚙️ Miscellaneous Tasks
 
