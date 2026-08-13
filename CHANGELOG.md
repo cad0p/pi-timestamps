@@ -5,7 +5,15 @@ All notable changes to this project will be documented in this file.
 ## [0.2.0] - 2026-08-13
 
 <!-- USER-EDITABLE SECTION START -->
-<!-- Add your curated release notes here. -->
+v0.2 — timestamps moved out of message content into **TUI-only data-less custom entries**.
+
+**What's new:**
+- Timestamps render as custom session entries (`registerEntryRenderer`) — message content is never touched, so `/export`, `/share`, `/copy`, `pi -p` and `--mode json` output stays clean (no ANSI escapes, no stamp text)
+- User messages get timestamps too (previously assistant-only), placed below the prompt
+- Timestamps survive `/import` and `/resume`; old v0.1.4 sessions keep rendering their inline stamps, and a legacy strip keeps them out of the LLM context
+- **Requires pi ≥ 0.80.4** (`registerEntryRenderer`)
+
+Install with `pi install npm:@cad0p/pi-timestamps`.
 <!-- USER-EDITABLE SECTION END -->
 
 ### 🚀 Features
