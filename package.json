@@ -1,6 +1,6 @@
 {
   "name": "@cad0p/pi-timestamps",
-  "version": "0.1.4",
+  "version": "0.2.0",
   "description": "UTC timestamps for every message in pi coding agent — TUI-only data-less custom-entry markers, clean export/copy/print, zero-config",
   "publishConfig": {
     "access": "public",
