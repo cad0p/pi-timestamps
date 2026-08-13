@@ -2,8 +2,6 @@
  * message-timestamps tests
  */
 
-import { beforeEach, describe, expect, it } from 'bun:test';
-
 import type { TextContent } from '@earendil-works/pi-ai';
 import type {
   CustomEntry,
@@ -12,6 +10,7 @@ import type {
   SessionEntry,
 } from '@earendil-works/pi-coding-agent';
 import { Text } from '@earendil-works/pi-tui';
+import { beforeEach, describe, expect, it } from 'vitest';
 
 import extension, {
   _reset,

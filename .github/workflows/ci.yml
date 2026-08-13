@@ -15,18 +15,22 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      - uses: oven-sh/setup-bun@v2
+      # pnpm 11 — same install path pi uses for this extension, so an
+      # unapproved build script (ERR_PNPM_IGNORED_BUILDS) fails CI instead
+      # of breaking `pi update` locally.
+      - uses: pnpm/action-setup@v6
         with:
-          bun-version: latest
+          version: 11
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
 
-      - name: Install dependencies
-        run: bun install
+      - run: pnpm install --frozen-lockfile
 
       - name: Lint
-        run: bun run lint
-
+        run: pnpm run lint
       - name: Typecheck
-        run: bun run typecheck
-
+        run: pnpm run typecheck
       - name: Test
-        run: bun run test
+        run: pnpm run test

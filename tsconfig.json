@@ -10,7 +10,7 @@
     "isolatedModules": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "types": ["bun"]
+    "types": ["node"]
   },
   "include": ["extensions/**/*.ts"],
   "exclude": ["node_modules"]
