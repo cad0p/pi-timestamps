@@ -1,0 +1,7 @@
+# Build-script approval for the @earendil-works/pi-coding-agent peer graph
+# (mirrors pi-steering/pi-napkin): genai's postinstall is needed for its JS
+# runtime, esbuild's binary for vitest; protobufjs works without its postinstall.
+allowBuilds:
+  '@google/genai': true
+  esbuild: true
+  protobufjs: false
