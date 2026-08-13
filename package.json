@@ -44,8 +44,8 @@
     "typescript": "^5.8.0"
   },
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": ">=0.74.0",
-    "@earendil-works/pi-tui": ">=0.74.0"
+    "@earendil-works/pi-coding-agent": ">=0.80.4",
+    "@earendil-works/pi-tui": ">=0.80.4"
   },
   "license": "MIT"
 }
