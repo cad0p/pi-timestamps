@@ -309,5 +309,12 @@ describe('message-timestamps', () => {
       const e = { ...entry('missing'), timestamp: 'not-a-date' };
       expect(render(e)).toBeUndefined();
     });
+
+    it('falls back to the entry timestamp when sessionManager was never captured', () => {
+      _reset(); // module state cleared — session_start never fired
+      const result = render(entry('p1'));
+      const props = result as { text: string };
+      expect(props.text).toBe(`${DIM}2026-06-05T21:44:03Z${RESET}`);
+    });
   });
 });
