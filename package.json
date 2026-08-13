@@ -1,7 +1,7 @@
 {
   "name": "@cad0p/pi-timestamps",
   "version": "0.1.4",
-  "description": "Inline UTC timestamps for every message in pi coding agent — dim-styled, LLM-safe, zero-config",
+  "description": "UTC timestamps for every message in pi coding agent — TUI-only data-less custom-entry markers, clean export/copy/print, zero-config",
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org"
@@ -44,8 +44,8 @@
     "typescript": "^5.8.0"
   },
   "peerDependencies": {
-    "@earendil-works/pi-coding-agent": ">=0.74.0",
-    "@earendil-works/pi-tui": ">=0.74.0"
+    "@earendil-works/pi-coding-agent": ">=0.80.4",
+    "@earendil-works/pi-tui": ">=0.80.4"
   },
   "license": "MIT"
 }
