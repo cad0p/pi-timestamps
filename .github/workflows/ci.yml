@@ -23,7 +23,7 @@ jobs:
           version: 11
       - uses: actions/setup-node@v6
         with:
-          node-version: lts/*
+          node-version: 22.19
           cache: pnpm
 
       - run: pnpm install --frozen-lockfile
