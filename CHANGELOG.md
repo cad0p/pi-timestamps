@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [calver-released]
+
+<!-- USER-EDITABLE SECTION START -->
+<!-- Add your curated release notes here. -->
+<!-- USER-EDITABLE SECTION END -->
+
+### 🐛 Bug Fixes
+
+- Use semver-calver-release composite actions for PR validation ([#21](https://github.com/cad0p/pi-timestamps/pull/21))
+- *(package)* Ship CHANGELOG.md so Pi shows Extension Updates (closes #25)
+
+### ⚙️ Miscellaneous Tasks
+
+- Migrate from bun to pnpm (pi-napkin pattern) ([#22](https://github.com/cad0p/pi-timestamps/pull/22))
+- Pin node to pi's minimum (22.19) — pi-coding-agent engines >=22.19.0 ([#24](https://github.com/cad0p/pi-timestamps/pull/24))
+
+
 ## [0.2.0] - 2026-08-13
 
 <!-- USER-EDITABLE SECTION START -->
