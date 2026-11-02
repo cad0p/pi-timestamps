@@ -25,6 +25,7 @@
   "files": [
     "extensions/message-timestamps/index.ts",
     "README.md",
+    "CHANGELOG.md",
     "LICENSE"
   ],
   "pi": {
